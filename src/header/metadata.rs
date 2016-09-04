@@ -3,7 +3,7 @@ use std::str;
 
 use header::{Header, RequestHeader, ResponseHeader, parse_value, serialize_value, parse_list1,
              serialize_list};
-use header::item::{MediaType, Coding, Language, Url};
+use header::item::{MediaType, Coding, LanguageTag, Url};
 
 /// `Content-Type` header, [RFC7231 Section 3.1.1.5]
 #[derive(Clone, Debug)]
@@ -15,7 +15,7 @@ pub struct ContentEncoding(Vec<Coding>);
 
 /// `Content-Language` header, [RFC7231 Section 3.1.3.2]
 #[derive(Clone, Debug)]
-pub struct ContentLanguage(Vec<Language>);
+pub struct ContentLanguage(Vec<LanguageTag>);
 
 /// `Content-Location` header, [RFC7231 Section 3.1.4.2]
 #[derive(Clone, Debug)]
@@ -99,8 +99,8 @@ impl From<Vec<Coding>> for ContentEncoding {
     }
 }
 
-impl From<Vec<Language>> for ContentLanguage {
-    fn from(t: Vec<Language>) -> Self {
+impl From<Vec<LanguageTag>> for ContentLanguage {
+    fn from(t: Vec<LanguageTag>) -> Self {
         ContentLanguage(t)
     }
 }

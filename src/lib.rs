@@ -15,8 +15,10 @@
 
 #[cfg(feature="negotiation")]
 extern crate charsets;
+extern crate language_tags;
 #[macro_use]
 extern crate matches;
+extern crate media_types;
 extern crate url;
 
 pub mod header;

@@ -12,7 +12,7 @@
 //! ## Representation Metadata
 //!
 //! Properties of the transmitted representation. A *resource* is a
-//! document in HTTP. It may have different *representation*s. These
+//! document in HTTP. It may have different *representations*. These
 //! differ in their language, data type or compression.
 //!
 //! A client tell the server its preference for some representation

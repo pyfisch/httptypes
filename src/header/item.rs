@@ -8,12 +8,9 @@ use std::fmt::{self, Display};
 use std::str::FromStr;
 
 pub use charsets::Charset;
+pub use language_tags::LanguageTag;
+pub use media_types::MediaType;
 pub use url::Url;
-
-#[allow(missing_docs)]
-pub type MediaType = String;
-#[allow(missing_docs)]
-pub type Language = String;
 
 /// Content coding names, [RFC 7231, Section 3.1.2.1]
 ///

@@ -2,7 +2,7 @@ use std::io::{self, Write};
 use std::ops::Deref;
 
 use header::{Header, RequestHeader, parse_list0, parse_list1, serialize_list};
-use header::item::{Charset, Coding, Language, MediaType, Url, Quality};
+use header::item::{Charset, Coding, LanguageTag, MediaType, Url, Quality};
 
 /// `Accept` header, [RFC7231 Section 5.3.2]
 #[derive(Clone, Debug)]
@@ -18,7 +18,7 @@ pub struct AcceptEncoding(Vec<Quality<Coding>>);
 
 /// `Accept-Language` header, [RFC7231 Section 5.3.5]
 #[derive(Clone, Debug)]
-pub struct AcceptLanguage(Vec<Quality<Language>>);
+pub struct AcceptLanguage(Vec<Quality<LanguageTag>>);
 
 impl RequestHeader for Accept {}
 impl RequestHeader for AcceptCharset {}
@@ -102,7 +102,7 @@ impl Deref for AcceptEncoding {
 }
 
 impl Deref for AcceptLanguage {
-    type Target = Vec<Quality<Language>>;
+    type Target = Vec<Quality<LanguageTag>>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -127,8 +127,8 @@ impl From<Vec<Quality<Coding>>> for AcceptEncoding {
     }
 }
 
-impl From<Vec<Quality<Language>>> for AcceptLanguage {
-    fn from(t: Vec<Quality<Language>>) -> Self {
+impl From<Vec<Quality<LanguageTag>>> for AcceptLanguage {
+    fn from(t: Vec<Quality<LanguageTag>>) -> Self {
         AcceptLanguage(t)
     }
 }
