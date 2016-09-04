@@ -1,3 +1,8 @@
+//! Types used inside header fields.
+//!
+//! Headers are often constructed from complex types.
+//! These types are defined in this module.
+
 use std::ascii::AsciiExt;
 use std::fmt::{self, Display};
 use std::str::FromStr;
@@ -5,7 +10,9 @@ use std::str::FromStr;
 pub use charsets::Charset;
 pub use url::Url;
 
+#[allow(missing_docs)]
 pub type MediaType = String;
+#[allow(missing_docs)]
 pub type Language = String;
 
 /// Content coding names, [RFC 7231, Section 3.1.2.1]
@@ -96,6 +103,14 @@ impl PartialEq for Coding {
     }
 }
 
+/// Quality items are used on content negotiation headers.
+///
+/// They indicate relative preferences of the client.
+///
+/// To create a new quality item with a weight of 0.5 one can
+/// use `Quality::new("item", 500)`. A most preferred item with
+/// the weight of 1.0 can be created with `"item".into()` if
+/// needed.
 #[derive(Clone, Debug)]
 pub struct Quality<T> {
     item: T,
@@ -103,6 +118,7 @@ pub struct Quality<T> {
 }
 
 impl<T> Quality<T> {
+    /// Constructs a new quality item with a given weight.
     pub fn new<I: Into<Weight>>(item: T, weight: I) -> Quality<T> {
         Quality {
             item: item,
@@ -166,10 +182,17 @@ impl<T> From<T> for Quality<T> {
 ///
 /// The value is between 0.000 and 1.000 represented
 /// by the numbers 0 to 1000.
+///
+/// The weight is stored as an integer for more compact
+/// storage and easier parsing and comparison.
+///
+/// A weight from the RFC is multiplied by 100 to get
+/// its integer value.
 #[derive(Clone, Debug)]
 pub struct Weight(u16);
 
 impl Weight {
+    /// Constructs a new weight from an integer between 0 and 1000.
     pub fn new(n: u16) -> Weight {
         assert!(n <= 1000, "Weight must be 1000 or less.");
         Weight(n)

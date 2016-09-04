@@ -5,9 +5,20 @@ use header::{Header, RequestHeader, ResponseHeader, parse_value, serialize_value
              serialize_list};
 use header::item::{MediaType, Coding, Language, Url};
 
+/// `Content-Type` header, [RFC7231 Section 3.1.1.5]
+#[derive(Clone, Debug)]
 pub struct ContentType(MediaType);
+
+/// `Content-Encoding` header, [RFC7231 Section 3.1.2.2]
+#[derive(Clone, Debug)]
 pub struct ContentEncoding(Vec<Coding>);
+
+/// `Content-Language` header, [RFC7231 Section 3.1.3.2]
+#[derive(Clone, Debug)]
 pub struct ContentLanguage(Vec<Language>);
+
+/// `Content-Location` header, [RFC7231 Section 3.1.4.2]
+#[derive(Clone, Debug)]
 pub struct ContentLocation(Url);
 
 impl RequestHeader for ContentType {}

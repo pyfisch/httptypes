@@ -4,15 +4,19 @@ use std::ops::Deref;
 use header::{Header, RequestHeader, parse_list0, parse_list1, serialize_list};
 use header::item::{Charset, Coding, Language, MediaType, Url, Quality};
 
+/// `Accept` header, [RFC7231 Section 5.3.2]
 #[derive(Clone, Debug)]
 pub struct Accept(Vec<Quality<MediaType>>);
 
+/// `Accept-Charset` header, [RFC7231 Section 5.3.3]
 #[derive(Clone, Debug)]
 pub struct AcceptCharset(Vec<Quality<Charset>>);
 
+/// `Accept-Encoding` header, [RFC7231 Section 5.3.4]
 #[derive(Clone, Debug)]
 pub struct AcceptEncoding(Vec<Quality<Coding>>);
 
+/// `Accept-Language` header, [RFC7231 Section 5.3.5]
 #[derive(Clone, Debug)]
 pub struct AcceptLanguage(Vec<Quality<Language>>);
 

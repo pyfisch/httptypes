@@ -1,4 +1,17 @@
+//! The *httptypes* crate is a collection of useful abstractions for
+//! building HTTP clients and servers.
+//!
+//! It contains types for
+//!
+//! * [request method](enum.Method.html),
+//! * [response status](struct.Status.html),
+//! * [header fields](header/index.html) and
+//! * the [protocol version](enum.Version.html).
+//!
+//! Each type has useful that help to implement HTTP.
+
 #![feature(associated_consts, question_mark)]
+#![deny(missing_docs)]
 
 #[cfg(feature="negotiation")]
 extern crate charsets;

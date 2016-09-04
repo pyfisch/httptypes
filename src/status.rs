@@ -250,26 +250,32 @@ impl Status {
         }
     }
 
+    /// Checks if the response is informational.
     pub fn is_informational(&self) -> bool {
         self.class() == StatusClass::Informational
     }
 
+    /// Checks if the status code indicates success.
     pub fn is_success(&self) -> bool {
         self.class() == StatusClass::Success
     }
 
+    /// Checks if a redirect was encountered.
     pub fn is_redirection(&self) -> bool {
         self.class() == StatusClass::Redirection
     }
 
+    /// Checks if a client error occured.
     pub fn is_client_error(&self) -> bool {
         self.class() == StatusClass::ClientError
     }
 
+    /// Checks if a server error occured.
     pub fn is_server_error(&self) -> bool {
         self.class() == StatusClass::ServerError
     }
 
+    /// Checks if the status code belongs to no known class.
     pub fn is_no_class(&self) -> bool {
         self.class() == StatusClass::NoClass
     }
@@ -295,7 +301,11 @@ impl Display for Status {
     }
 }
 
-
+/// Status codes are grouped in to status classes.
+///
+/// These classes depend on the first integer of the status code.
+/// Clients may fallback to default behavoir if they encounter an
+/// unknown status code.
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum StatusClass {
     /// Informational codes indicate an interim response. [RFC7231, Section 6.2]
