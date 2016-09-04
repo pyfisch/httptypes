@@ -6,18 +6,10 @@ use std::str::{self, FromStr};
 use url::Url;
 
 #[cfg(feature="metadata")]
-pub use self::metadata::{
-    ContentType,
-    ContentEncoding,
-    ContentLanguage,
-    ContentLocation};
+pub use self::metadata::{ContentType, ContentEncoding, ContentLanguage, ContentLocation};
 
 #[cfg(feature="negotiation")]
-pub use self::negotiation::{
-    Accept,
-    AcceptCharset,
-    AcceptEncoding,
-    AcceptLanguage};
+pub use self::negotiation::{Accept, AcceptCharset, AcceptEncoding, AcceptLanguage};
 
 pub mod item;
 #[cfg(feature="metadata")]
@@ -25,12 +17,14 @@ mod metadata;
 #[cfg(feature="negotiation")]
 mod negotiation;
 
-pub trait Header where Self: Sized {
+pub trait Header
+    where Self: Sized
+{
     const NAME: &'static str;
     const SENSITIVE: bool;
 
     fn parse(s: &[Vec<u8>], base: Url) -> Result<Self, ()>;
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> Result<(), io::Error>;
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> Result<(), io::Error>;
 }
 
 pub trait RequestHeader: Header {}
@@ -38,15 +32,19 @@ pub trait ResponseHeader: Header {}
 
 fn parse_value<T: FromStr>(s: &[Vec<u8>]) -> Result<T, ()> {
     if s.len() != 1 {
-        return Err(())
+        return Err(());
     }
-    str::from_utf8(s[0].as_slice()).ok()
+    str::from_utf8(s[0].as_slice())
+        .ok()
         .and_then(|x| x.parse().ok())
         .ok_or(())
 }
 
 fn serialize_value<I, W, T>(mut iter: I, v: T) -> Result<(), io::Error>
-        where I: Iterator<Item=W>, W: Write, T: Display {
+    where I: Iterator<Item = W>,
+          W: Write,
+          T: Display
+{
     write!(iter.next().unwrap(), "{}", v)
 }
 
@@ -56,7 +54,7 @@ struct IterListHeader<'a> {
     column: usize,
 }
 
-impl <'a>IterListHeader<'a> {
+impl<'a> IterListHeader<'a> {
     fn new(values: &[Vec<u8>]) -> IterListHeader {
         IterListHeader {
             values: values,
@@ -66,7 +64,7 @@ impl <'a>IterListHeader<'a> {
     }
 }
 
-impl <'a>Iterator for IterListHeader<'a> {
+impl<'a> Iterator for IterListHeader<'a> {
     type Item = &'a [u8];
     fn next(&mut self) -> Option<&'a [u8]> {
         for line in self.line..self.values.len() {
@@ -100,10 +98,12 @@ impl <'a>Iterator for IterListHeader<'a> {
 
 fn parse_list0<T: FromStr>(s: &[Vec<u8>]) -> Result<Vec<T>, ()> {
     let iter = IterListHeader::new(s);
-    let items: Option<Vec<T>> = iter.map(|x|
-            str::from_utf8(x).ok()
-                .and_then(|x| x.parse().ok()))
-                .collect();
+    let items: Option<Vec<T>> = iter.map(|x| {
+            str::from_utf8(x)
+                .ok()
+                .and_then(|x| x.parse().ok())
+        })
+        .collect();
     items.ok_or(())
 }
 
@@ -116,7 +116,10 @@ fn parse_list1<T: FromStr>(s: &[Vec<u8>]) -> Result<Vec<T>, ()> {
 }
 
 fn serialize_list<I, W, T>(mut iter: I, values: &[T]) -> Result<(), io::Error>
-        where I: Iterator<Item=W>, W: Write, T: Display {
+    where I: Iterator<Item = W>,
+          W: Write,
+          T: Display
+{
     let mut w = iter.next().unwrap();
     for (i, v) in values.iter().enumerate() {
         if i != 0 {

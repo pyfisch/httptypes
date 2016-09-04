@@ -88,47 +88,46 @@ pub enum Method {
     Unregistered(String),
 }
 
-const MAPPING: [(Method, &'static str, bool, bool); 39] = [
-    (Acl, "ACL", false, true),
-    (BaselineControl, "BASELINE-CONTROL", false, true),
-    (Bind, "BIND", false, true),
-    (Checkin, "CHECKIN", false, true),
-    (Checkout, "CHECKOUT", false, true),
-    (Connect, "CONNECT", false, false),
-    (Copy, "COPY", false, true),
-    (Delete, "DELETE", false, true),
-    (Get, "GET", true, true),
-    (Head, "HEAD", true, true),
-    (Label, "LABEL", false, true),
-    (Link, "LINK", false, true),
-    (Lock, "LOCK", false, false),
-    (Merge, "MERGE", false, true),
-    (Mkactivity, "MKACTIVITY", false, true),
-    (Mkcalendar, "MKCALENDAR", false, true),
-    (Mkcol, "MKCOL", false, true),
-    (Mkredirectref, "MKREDIRECTREF", false, true),
-    (Mkworkspace, "MKWORKSPACE", false, true),
-    (Move, "MOVE", false, true),
-    (Options, "OPTIONS", true, true),
-    (Orderpatch, "ORDERPATCH", false, true),
-    (Patch, "PATCH", false, false),
-    (Post, "POST", false, false),
-    (Pri, "PRI", true, true),
-    (Propfind, "PROPFIND", true, true),
-    (Proppatch, "PROPPATCH", false, true),
-    (Put, "PUT", false, true),
-    (Rebind, "REBIND", false, true),
-    (Report, "REPORT", true, true),
-    (Search, "SEARCH", true, true),
-    (Trace, "TRACE", true, true),
-    (Unbind, "UNBIND", false, true),
-    (Uncheckout, "UNCHECKOUT", false, true),
-    (Unlink, "UNLINK", false, true),
-    (Unlock, "UNLOCK", false, true),
-    (Update, "UPDATE", false, true),
-    (Updateredirectref, "UPDATEREDIRECTREF", false, true),
-    (VersionControl, "VERSION-CONTROL", false, true),
-];
+const MAPPING: [(Method, &'static str, bool, bool); 39] =
+    [(Acl, "ACL", false, true),
+     (BaselineControl, "BASELINE-CONTROL", false, true),
+     (Bind, "BIND", false, true),
+     (Checkin, "CHECKIN", false, true),
+     (Checkout, "CHECKOUT", false, true),
+     (Connect, "CONNECT", false, false),
+     (Copy, "COPY", false, true),
+     (Delete, "DELETE", false, true),
+     (Get, "GET", true, true),
+     (Head, "HEAD", true, true),
+     (Label, "LABEL", false, true),
+     (Link, "LINK", false, true),
+     (Lock, "LOCK", false, false),
+     (Merge, "MERGE", false, true),
+     (Mkactivity, "MKACTIVITY", false, true),
+     (Mkcalendar, "MKCALENDAR", false, true),
+     (Mkcol, "MKCOL", false, true),
+     (Mkredirectref, "MKREDIRECTREF", false, true),
+     (Mkworkspace, "MKWORKSPACE", false, true),
+     (Move, "MOVE", false, true),
+     (Options, "OPTIONS", true, true),
+     (Orderpatch, "ORDERPATCH", false, true),
+     (Patch, "PATCH", false, false),
+     (Post, "POST", false, false),
+     (Pri, "PRI", true, true),
+     (Propfind, "PROPFIND", true, true),
+     (Proppatch, "PROPPATCH", false, true),
+     (Put, "PUT", false, true),
+     (Rebind, "REBIND", false, true),
+     (Report, "REPORT", true, true),
+     (Search, "SEARCH", true, true),
+     (Trace, "TRACE", true, true),
+     (Unbind, "UNBIND", false, true),
+     (Uncheckout, "UNCHECKOUT", false, true),
+     (Unlink, "UNLINK", false, true),
+     (Unlock, "UNLOCK", false, true),
+     (Update, "UPDATE", false, true),
+     (Updateredirectref, "UPDATEREDIRECTREF", false, true),
+     (VersionControl, "VERSION-CONTROL", false, true)];
 
 impl Method {
     /// Safe methods are essentially read-only.
@@ -137,9 +136,9 @@ impl Method {
             return false;
         }
         MAPPING.iter()
-               .find(|&&(ref method, _, _, _)| method == self)
-               .map(|&(_, _, b, _)| b)
-               .unwrap()
+            .find(|&&(ref method, _, _, _)| method == self)
+            .map(|&(_, _, b, _)| b)
+            .unwrap()
     }
 
     /// Idempotent methods may be called multiple times on the same
@@ -149,9 +148,9 @@ impl Method {
             return false;
         }
         MAPPING.iter()
-               .find(|&&(ref method, _, _, _)| method == self)
-               .map(|&(_, _, _, b)| b)
-               .unwrap()
+            .find(|&&(ref method, _, _, _)| method == self)
+            .map(|&(_, _, _, b)| b)
+            .unwrap()
     }
 }
 
@@ -161,9 +160,9 @@ impl Display for Method {
             return f.write_str(s);
         }
         f.write_str(MAPPING.iter()
-                           .find(|&&(ref method, _, _, _)| method == self)
-                           .map(|&(_, s, _, _)| s)
-                           .unwrap())
+            .find(|&&(ref method, _, _, _)| method == self)
+            .map(|&(_, s, _, _)| s)
+            .unwrap())
     }
 }
 
@@ -173,8 +172,8 @@ impl FromStr for Method {
     fn from_str(s: &str) -> Result<Method, ()> {
         // TODO: Check if method contains only valid characters.
         MAPPING.iter()
-               .find(|&&(_, name, _, _)| s == name)
-               .map(|&(ref method, _, _, _)| Ok(method.clone()))
-               .unwrap_or_else(|| Ok(Unregistered(s.to_owned())))
+            .find(|&&(_, name, _, _)| s == name)
+            .map(|&(ref method, _, _, _)| Ok(method.clone()))
+            .unwrap_or_else(|| Ok(Unregistered(s.to_owned())))
     }
 }

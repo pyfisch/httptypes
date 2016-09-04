@@ -49,7 +49,7 @@ impl Status {
     /// 304: Not Modified, [RFC7232, Section 4.1]
     pub const NOT_MODIFIED: Status = Status(304);
     /// 305: Use Proxy, [RFC7231, Section 6.4.5]
-    pub const USE_PROXY: Status = Status(305    );
+    pub const USE_PROXY: Status = Status(305);
     /// 307: Temporary Redirect, [RFC7231, Section 6.4.7]
     pub const TEMPORARY_REDIRECT: Status = Status(307);
     /// 308: Permanent Redirect, [RFC7538]
@@ -144,7 +144,7 @@ impl Status {
     /// (e.g. for `XmlHttpRequest`) you must use `from_raw`.
     pub fn new(code: u16) -> Status {
         assert!(code >= 100 && code < 600,
-            "valid status codes are in the range 100 to 599");
+                "valid status codes are in the range 100 to 599");
         Status(code)
     }
 
@@ -280,15 +280,18 @@ impl Status {
     /// expiration unless otherwise indicated by the method definition or
     /// explicit cache controls.
     pub fn is_cacheable(&self) -> bool {
-        self.0 == 200 || self.0 == 203 || self.0 == 204 || self.0 == 206
-        || self.0 == 300 || self.0 == 301 || self.0 == 404 || self.0 == 405
-        || self.0 == 410 || self.0 == 414 || self.0 == 501
+        self.0 == 200 || self.0 == 203 || self.0 == 204 || self.0 == 206 ||
+        self.0 == 300 || self.0 == 301 || self.0 == 404 || self.0 == 405 ||
+        self.0 == 410 || self.0 == 414 || self.0 == 501
     }
 }
 
 impl Display for Status {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} {}", self.0, self.canonical_reason().unwrap_or("<unknown>"))
+        write!(f,
+               "{} {}",
+               self.0,
+               self.canonical_reason().unwrap_or("<unknown>"))
     }
 }
 

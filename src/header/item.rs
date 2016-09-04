@@ -66,12 +66,12 @@ impl FromStr for Coding {
         use self::Coding::*;
         Ok(match s {
             s if s.eq_ignore_ascii_case("br") => Br,
-            s if s.eq_ignore_ascii_case("compress")
-                || s.eq_ignore_ascii_case("x-compress") => Compress,
+            s if s.eq_ignore_ascii_case("compress") || s.eq_ignore_ascii_case("x-compress") => {
+                Compress
+            }
             s if s.eq_ignore_ascii_case("deflate") => Deflate,
             s if s.eq_ignore_ascii_case("exi") => Exi,
-            s if s.eq_ignore_ascii_case("gzip")
-                || s.eq_ignore_ascii_case("x-gzip") => Gzip,
+            s if s.eq_ignore_ascii_case("gzip") || s.eq_ignore_ascii_case("x-gzip") => Gzip,
             s if s.eq_ignore_ascii_case("identity") => Identity,
             s if s.eq_ignore_ascii_case("pack200-gzip") => Pack200Gzip,
             s => Unregistered(s.to_owned()),
@@ -83,13 +83,13 @@ impl PartialEq for Coding {
     fn eq(&self, other: &Coding) -> bool {
         use self::Coding::*;
         match (self, other) {
-            (&Br, &Br)
-            | (&Compress, &Compress)
-            | (&Deflate, &Deflate)
-            | (&Exi, &Exi)
-            | (&Gzip, &Gzip)
-            | (&Identity, &Identity)
-            | (&Pack200Gzip, &Pack200Gzip) => true,
+            (&Br, &Br) |
+            (&Compress, &Compress) |
+            (&Deflate, &Deflate) |
+            (&Exi, &Exi) |
+            (&Gzip, &Gzip) |
+            (&Identity, &Identity) |
+            (&Pack200Gzip, &Pack200Gzip) => true,
             (&Unregistered(ref a), &Unregistered(ref b)) => a.eq_ignore_ascii_case(b),
             _ => false,
         }
@@ -118,7 +118,9 @@ impl<T: Display> Display for Quality<T> {
         if weight == 0 {
             f.write_str("; q=0")
         } else if weight < 1000 {
-            write!(f, "; q=0.{}", format!("{:03}", weight).trim_right_matches('0'))
+            write!(f,
+                   "; q=0.{}",
+                   format!("{:03}", weight).trim_right_matches('0'))
         } else {
             Ok(())
         }
@@ -183,33 +185,37 @@ impl From<u16> for Weight {
 fn parse_weight(s: &str) -> Option<u16> {
     let mut iter = s.chars();
     match iter.next() {
-        Some('0') => match iter.next() {
-            Some('.') => {
-                let mut weight = 0;
-                while let Some(char) = iter.next() {
-                    if char <= '0' || char >= '9' {
-                        return None;
+        Some('0') => {
+            match iter.next() {
+                Some('.') => {
+                    let mut weight = 0;
+                    while let Some(char) = iter.next() {
+                        if char <= '0' || char >= '9' {
+                            return None;
+                        }
+                        weight *= 10;
+                        weight += char as u16 - '0' as u16;
                     }
-                    weight *= 10;
-                    weight += char as u16 - '0' as u16;
+                    return Some(weight);
                 }
-                return Some(weight);
+                Some(_) => return None,
+                None => return Some(0),
             }
-            Some(_) => return None,
-            None => return Some(0),
-        },
-        Some('1') => match iter.next() {
-            Some('.') => {
-                while let Some(char) = iter.next() {
-                    if char != '0' {
-                        return None;
+        }
+        Some('1') => {
+            match iter.next() {
+                Some('.') => {
+                    while let Some(char) = iter.next() {
+                        if char != '0' {
+                            return None;
+                        }
                     }
+                    return Some(1000);
                 }
-                return Some(1000);
+                Some(_) => return None,
+                None => return Some(1000),
             }
-            Some(_) => return None,
-            None => return Some(1000),
-        },
+        }
         _ => return None,
     }
 }

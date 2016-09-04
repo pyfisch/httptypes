@@ -1,8 +1,8 @@
 use std::io::{self, Write};
 use std::str;
 
-use header::{Header, RequestHeader, ResponseHeader, parse_value,
-    serialize_value, parse_list1, serialize_list};
+use header::{Header, RequestHeader, ResponseHeader, parse_value, serialize_value, parse_list1,
+             serialize_list};
 use header::item::{MediaType, Coding, Language, Url};
 
 pub struct ContentType(MediaType);
@@ -28,7 +28,7 @@ impl Header for ContentType {
         parse_value::<MediaType>(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_value(iter, &self.0)
     }
 }
@@ -41,7 +41,7 @@ impl Header for ContentEncoding {
         parse_list1(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
@@ -54,7 +54,7 @@ impl Header for ContentLanguage {
         parse_list1(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
@@ -65,13 +65,13 @@ impl Header for ContentLocation {
 
     fn parse(s: &[Vec<u8>], base: Url) -> Result<Self, ()> {
         if s.len() != 1 {
-            return Err(())
+            return Err(());
         }
         let raw = str::from_utf8(&s[0]).map_err(|_| ())?;
         base.join(raw).map_err(|_| ()).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_value(iter, &self.0)
     }
 }

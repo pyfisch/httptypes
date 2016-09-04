@@ -29,7 +29,7 @@ impl Header for Accept {
         parse_list0(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
@@ -42,7 +42,7 @@ impl Header for AcceptCharset {
         parse_list1(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
@@ -55,7 +55,7 @@ impl Header for AcceptEncoding {
         parse_list0(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
@@ -68,7 +68,7 @@ impl Header for AcceptLanguage {
         parse_list1(s).map(Into::into)
     }
 
-    fn serialize<I: Iterator<Item=W>, W: Write>(&self, iter: I) -> io::Result<()> {
+    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_list(iter, &self.0)
     }
 }
