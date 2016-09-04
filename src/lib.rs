@@ -9,6 +9,7 @@ extern crate url;
 pub mod header;
 mod method;
 mod status;
+mod util;
 mod version;
 
 pub use header::Header;

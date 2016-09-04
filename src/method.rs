@@ -1,6 +1,7 @@
 use std::fmt::{self, Display};
 use std::str::FromStr;
 
+use util;
 use self::Method::*;
 
 /// The method indicates the action to be performed on the target resource.
@@ -85,6 +86,8 @@ pub enum Method {
     /// VERSION-CONTROL, [RFC3253, Section 3.5]
     VersionControl,
     /// Any other unknown method.
+    ///
+    /// All characters allowed in a [token] may be used.
     Unregistered(String),
 }
 
@@ -170,10 +173,13 @@ impl FromStr for Method {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Method, ()> {
-        // TODO: Check if method contains only valid characters.
         MAPPING.iter()
             .find(|&&(_, name, _, _)| s == name)
             .map(|&(ref method, _, _, _)| Ok(method.clone()))
-            .unwrap_or_else(|| Ok(Unregistered(s.to_owned())))
+            .unwrap_or_else(|| if util::is_token(s) {
+                Ok(Unregistered(s.to_owned()))
+            } else {
+                Err(())
+            })
     }
 }
