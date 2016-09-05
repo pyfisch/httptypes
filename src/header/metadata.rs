@@ -1,4 +1,5 @@
 use std::io::{self, Write};
+use std::ops::Deref;
 use std::str;
 
 use header::{Header, RequestHeader, ResponseHeader, parse_value, serialize_value, parse_list1,
@@ -84,6 +85,38 @@ impl Header for ContentLocation {
 
     fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
         serialize_value(iter, &self.0)
+    }
+}
+
+impl Deref for ContentType {
+    type Target = MediaType;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Deref for ContentEncoding {
+    type Target = Vec<Coding>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Deref for ContentLanguage {
+    type Target = Vec<LanguageTag>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Deref for ContentLocation {
+    type Target = Url;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 

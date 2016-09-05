@@ -4,8 +4,9 @@ version = "0.1.0"
 authors = ["Pyfisch <pyfisch@gmail.com>"]
 
 [features]
-default = ["metadata", "negotiation"]
+default = ["context", "metadata", "negotiation"]
 
+context = ["url"]
 metadata = ["url"]
 negotiation = ["charsets"]
 

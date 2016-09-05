@@ -46,12 +46,15 @@ use std::str::{self, FromStr};
 
 use url::Url;
 
+#[cfg(feature="context")]
+pub use self::context::{From, Referer, UserAgent, Allow, Server};
 #[cfg(feature="metadata")]
 pub use self::metadata::{ContentType, ContentEncoding, ContentLanguage, ContentLocation};
-
 #[cfg(feature="negotiation")]
 pub use self::negotiation::{Accept, AcceptCharset, AcceptEncoding, AcceptLanguage};
 
+#[cfg(feature="context")]
+mod context;
 pub mod item;
 #[cfg(feature="metadata")]
 mod metadata;
