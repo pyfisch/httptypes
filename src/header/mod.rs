@@ -9,6 +9,17 @@
 //!
 //! The header fields can be sorted into different groups.
 //!
+//! ## Message Context
+//!
+//! Information about the resource and the endpoints.
+//!
+//! * [`From`](struct.From.html): client email address
+//! * [`Referer`](struct.Referer.html): page visited before and
+//!     linking to current resource
+//! * [`User-Agent`](struct.UserAgent.html): client software used
+//! * [`Allow`](struct.Allow.html): methods allowed on resource
+//! * [`Server`](struct.Server.html): server software used
+//!
 //! ## Representation Metadata
 //!
 //! Properties of the transmitted representation. A *resource* is a
@@ -26,7 +37,7 @@
 //! * [`Content-Location`](struct.ContentLocation.html): a link to the
 //!     current representation of the resource
 //!
-//! ## Content negotiation
+//! ## Content Negotiation
 //!
 //! A client sends these header fields along with a request for some
 //! resource so the server can give the client a response with the
