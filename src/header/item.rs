@@ -7,6 +7,7 @@ use std::ascii::AsciiExt;
 use std::fmt::{self, Display};
 use std::str::FromStr;
 
+#[cfg(feature="negotiation")]
 pub use charsets::Charset;
 pub use language_tags::LanguageTag;
 pub use media_types::MediaType;

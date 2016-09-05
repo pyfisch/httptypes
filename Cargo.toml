@@ -6,8 +6,8 @@ authors = ["Pyfisch <pyfisch@gmail.com>"]
 [features]
 default = ["context", "metadata", "negotiation"]
 
-context = ["url"]
-metadata = ["url"]
+context = []
+metadata = []
 negotiation = ["charsets"]
 
 [dependencies]
@@ -15,4 +15,4 @@ charsets = { version="0.2.0", optional=true }
 language-tags = "0.2.2"
 matches = "0.1.2"
 media-types = "0.2.0"
-url = { version="1.2.0", optional=true }
+url = "1.2.0"
