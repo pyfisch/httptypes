@@ -185,7 +185,7 @@ impl<'a> Iterator for IterListHeader<'a> {
             let value = &self.values[line];
             let mut maybe_start_column = None;
             let mut end_column = 0;
-            for column in self.column..value.len() {
+            for (column, _) in value.iter().enumerate().skip(self.column) {
                 let byte = value[column];
                 if byte != b' ' && byte != b'\t' && byte != b',' {
                     end_column = column + 1;

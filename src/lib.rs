@@ -10,7 +10,9 @@
 //!
 //! Each type has useful methods that help to implement HTTP.
 
-#![feature(associated_consts, question_mark)]
+#![feature(associated_consts)]
+// Allow setting flags for clippy lints unknown to the compiler.
+#![allow(unknown_lints)]
 #![deny(missing_docs)]
 
 #[cfg(feature="negotiation")]

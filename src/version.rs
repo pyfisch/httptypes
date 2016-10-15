@@ -6,6 +6,8 @@ use std::fmt::{self, Display};
 /// and it will never be supported. Most requests that
 /// appear to be HTTP/0.9 are malformed HTTP/1.0 requests.
 #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+// Clippy complains otherwise about "Http" prefix.
+#[allow(enum_variant_names)]
 pub enum Version {
     /// HTTP/1.0 protocol version.
     Http10,

@@ -217,27 +217,27 @@ fn parse_weight(s: &str) -> Option<u16> {
                         weight *= 10;
                         weight += char as u16 - '0' as u16;
                     }
-                    return Some(weight);
+                    Some(weight)
                 }
-                Some(_) => return None,
-                None => return Some(0),
+                Some(_) => None,
+                None => Some(0),
             }
         }
         Some('1') => {
             match iter.next() {
                 Some('.') => {
-                    while let Some(char) = iter.next() {
-                        if char != '0' {
+                    for c in iter {
+                        if c != '0' {
                             return None;
                         }
                     }
-                    return Some(1000);
+                    Some(1000)
                 }
-                Some(_) => return None,
-                None => return Some(1000),
+                Some(_) => None,
+                None => Some(1000),
             }
         }
-        _ => return None,
+        _ => None,
     }
 }
 
