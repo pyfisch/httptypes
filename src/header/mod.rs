@@ -49,6 +49,17 @@
 //!     usually used for compression
 //! * [`Accept-Language`](struct.AcceptLanguage.html): preferred languages
 //!     of the user
+//!
+//! ## Omitted header fields
+//! While *httptypes* aims to support the common header fields some are
+//! intentionally excluded. They usually can be better handled at a lower
+//! protocol level.
+//!
+//! * `Date`: message creation date. Created automatically on the server.
+//!     Unsure about common client usage.
+//! * `Expect: 100-continue`: better handled at the syntax and
+//!     routing layer.
+//! * `MIME-Version`: unsure about usage and placement.
 
 use std::fmt::{Debug, Display};
 use std::io::{self, Write};
@@ -59,6 +70,8 @@ use url::Url;
 
 #[cfg(feature="context")]
 pub use self::context::{From, Referer, UserAgent, Allow, Server};
+#[cfg(feature="control")]
+pub use self::control::{MaxForwards, Location, RetryAfter, Vary};
 #[cfg(feature="metadata")]
 pub use self::metadata::{ContentType, ContentEncoding, ContentLanguage, ContentLocation};
 #[cfg(feature="negotiation")]
@@ -66,6 +79,8 @@ pub use self::negotiation::{Accept, AcceptCharset, AcceptEncoding, AcceptLanguag
 
 #[cfg(feature="context")]
 mod context;
+#[cfg(feature="control")]
+mod control;
 pub mod item;
 #[cfg(feature="metadata")]
 mod metadata;

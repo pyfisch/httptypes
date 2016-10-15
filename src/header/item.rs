@@ -240,3 +240,23 @@ fn parse_weight(s: &str) -> Option<u16> {
         _ => return None,
     }
 }
+
+/// A header field name.
+///
+/// Header field names are case-insensitive.
+#[derive(Clone, Debug)]
+pub struct HeaderField(String);
+
+impl FromStr for HeaderField {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<HeaderField, ()> {
+        Ok(HeaderField(s.to_owned()))
+    }
+}
+
+impl Display for HeaderField {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}

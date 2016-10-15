@@ -8,13 +8,14 @@
 //! * [header fields](header/index.html) and
 //! * the [protocol version](enum.Version.html).
 //!
-//! Each type has useful that help to implement HTTP.
+//! Each type has useful methods that help to implement HTTP.
 
 #![feature(associated_consts, question_mark)]
 #![deny(missing_docs)]
 
 #[cfg(feature="negotiation")]
 extern crate charsets;
+extern crate httpdate;
 extern crate language_tags;
 #[macro_use]
 extern crate matches;
