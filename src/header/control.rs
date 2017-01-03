@@ -1,5 +1,4 @@
 use std::io::{self, Write};
-use std::ops::Deref;
 use std::str;
 use std::time::{Duration, SystemTime};
 
@@ -9,13 +8,37 @@ use header::{Header, RequestHeader, ResponseHeader, parse_value, serialize_value
             parse_list1, serialize_list};
 use header::item::{HeaderField, Url};
 
-/// `Max-Forwards header`, [RFC7231 Section 5.1.2]
-#[derive(Clone, Debug)]
-pub struct MaxForwards(u32);
+header!{
+    /// `Max-Forwards header`, [RFC7231 Section 5.1.2]
+    pub struct MaxForwards(u32);
+    (RequestHeader);
+    NAME = "Max-Forwards";
+    SENSITIVE = false;
+    parse(s, _base) {
+        parse_value::<u32>(s).map(Into::into)
+    }
+    serialize(self, iter) {
+        serialize_value(iter, &self.0)
+    }
+}
 
-/// `Location` header, [RFC7231 Section 7.1.2]
-#[derive(Clone, Debug)]
-pub struct Location(Url);
+header!{
+    /// `Location` header, [RFC7231 Section 7.1.2]
+    pub struct Location(Url);
+    (ResponseHeader);
+    NAME = "Location";
+    SENSITIVE = false;
+    parse(s, base) {
+        if s.len() != 1 {
+            return Err(());
+        }
+        let raw = str::from_utf8(&s[0]).map_err(|_| ())?;
+        base.join(raw).map_err(|_| ()).map(Into::into)
+    }
+    serialize(self, iter) {
+        serialize_value(iter, &self.0)
+    }
+}
 
 /// `Retry-After` header, [RFC7231 Section 7.1.3]
 #[derive(Clone, Debug)]
@@ -26,45 +49,7 @@ pub enum RetryAfter {
     Delay(Duration),
 }
 
-/// `Vary` header, [RFC7231 Section Section 7.1.4]
-#[derive(Clone, Debug)]
-pub struct Vary(Vec<HeaderField>);
-
-impl RequestHeader for MaxForwards {}
-
-impl ResponseHeader for Location {}
 impl ResponseHeader for RetryAfter {}
-impl ResponseHeader for Vary {}
-
-impl Header for MaxForwards {
-    const NAME: &'static str = "Max-Forwards";
-    const SENSITIVE: bool = false;
-
-    fn parse(s: &[Vec<u8>], _base: Url) -> Result<Self, ()> {
-        parse_value::<u32>(s).map(Into::into)
-    }
-
-    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
-        serialize_value(iter, &self.0)
-    }
-}
-
-impl Header for Location {
-    const NAME: &'static str = "Location";
-    const SENSITIVE: bool = false;
-
-    fn parse(s: &[Vec<u8>], base: Url) -> Result<Self, ()> {
-        if s.len() != 1 {
-            return Err(());
-        }
-        let raw = str::from_utf8(&s[0]).map_err(|_| ())?;
-        base.join(raw).map_err(|_| ()).map(Into::into)
-    }
-
-    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
-        serialize_value(iter, &self.0)
-    }
-}
 
 impl Header for RetryAfter {
     const NAME: &'static str = "Retry-After";
@@ -91,54 +76,6 @@ impl Header for RetryAfter {
     }
 }
 
-impl Header for Vary {
-    const NAME: &'static str = "Vary";
-    const SENSITIVE: bool = false;
-
-    fn parse(s: &[Vec<u8>], _base: Url) -> Result<Self, ()> {
-        parse_list1(s).map(Into::into)
-    }
-
-    fn serialize<I: Iterator<Item = W>, W: Write>(&self, iter: I) -> io::Result<()> {
-        serialize_list(iter, &self.0[..])
-    }
-}
-
-impl Deref for MaxForwards {
-    type Target = u32;
-
-    fn deref(&self) ->  &Self::Target {
-        &self.0
-    }
-}
-
-impl Deref for Location {
-    type Target = Url;
-
-    fn deref(&self) ->  &Self::Target {
-        &self.0
-    }
-}
-
-impl Deref for Vary {
-    type Target = Vec<HeaderField>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl From<u32> for MaxForwards {
-    fn from(t: u32) -> Self {
-        MaxForwards(t)
-    }
-}
-
-impl From<Url> for Location {
-    fn from(t: Url) -> Self {
-        Location(t)
-    }
-}
 
 impl From<SystemTime> for RetryAfter {
     fn from(t: SystemTime) -> Self {
@@ -152,8 +89,16 @@ impl From<Duration> for RetryAfter {
     }
 }
 
-impl From<Vec<HeaderField>> for Vary {
-    fn from(t: Vec<HeaderField>) -> Self {
-        Vary(t)
+header!{
+    /// `Vary` header, [RFC7231 Section Section 7.1.4]
+    pub struct Vary(Vec<HeaderField>);
+    (ResponseHeader);
+    NAME = "Vary";
+    SENSITIVE = false;
+    parse(s, _base) {
+        parse_list1(s).map(Into::into)
+    }
+    serialize(self, iter) {
+        serialize_list(iter, &self.0[..])
     }
 }
