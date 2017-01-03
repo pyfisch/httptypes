@@ -77,6 +77,50 @@ pub use self::metadata::{ContentType, ContentEncoding, ContentLanguage, ContentL
 #[cfg(feature="negotiation")]
 pub use self::negotiation::{Accept, AcceptCharset, AcceptEncoding, AcceptLanguage};
 
+macro_rules! header {
+    (
+        $(#[$a:meta])*
+        pub struct $header:ident($inner:ty);
+        ($($usage:ty)*);
+        NAME = $name:expr;
+        SENSITIVE = $sensitive:expr;
+        parse($s:ident, $base:ident) $parse:block
+        serialize($self_:ident, $iter:ident) $serialize:block
+    ) => {
+        $(#[$a])*
+        #[derive(Clone, Debug)]
+        pub struct $header($inner);
+
+        impl ::std::convert::From<$inner> for $header {
+            fn from(t: $inner) -> $header {
+                $header(t)
+            }
+        }
+
+        impl ::std::convert::From<$header> for $inner {
+            fn from(header: $header) -> $inner {
+                header.0
+            }
+        }
+
+        $(
+            impl $usage for $header {}
+        )*
+
+        impl ::header::Header for $header {
+            const NAME: &'static str = $name;
+            const SENSITIVE: bool = $sensitive;
+
+            fn parse($s: &[Vec<u8>], $base: Url) -> Result<Self, ()>
+            $parse
+
+            fn serialize<I: Iterator<Item = W>, W: ::std::io::Write>(&$self_, $iter: I)
+                -> ::std::io::Result<()>
+            $serialize
+        }
+    }
+}
+
 #[cfg(feature="context")]
 mod context;
 #[cfg(feature="control")]
