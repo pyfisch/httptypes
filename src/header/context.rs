@@ -15,7 +15,7 @@ header!{
         parse_value::<String>(s).map(Into::into)
     }
     serialize(self, iter) {
-            serialize_value(iter, &self.0)
+        serialize_value(iter, &self.0)
     }
 }
 
@@ -29,7 +29,7 @@ header!{
         parse_value::<Url>(s).map(Into::into)
     }
     serialize(self, iter) {
-            serialize_value(iter, &self.0)
+        serialize_value(iter, &self.0)
     }
 }
 
@@ -46,7 +46,7 @@ header!{
         parse_value::<String>(s).map(Into::into)
     }
     serialize(self, iter) {
-            serialize_value(iter, &self.0)
+        serialize_value(iter, &self.0)
     }
 }
 
@@ -60,7 +60,7 @@ header!{
         parse_list0::<Method>(s).map(Into::into)
     }
     serialize(self, iter) {
-            serialize_list(iter, &self.0)
+        serialize_list(iter, &self.0)
     }
 }
 
@@ -77,6 +77,6 @@ header!{
         parse_value::<String>(s).map(Into::into)
     }
     serialize(self, iter) {
-            serialize_value(iter, &self.0)
+        serialize_value(iter, &self.0)
     }
 }
