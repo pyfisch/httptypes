@@ -4,8 +4,9 @@ version = "0.1.0"
 authors = ["Pyfisch <pyfisch@gmail.com>"]
 
 [features]
-default = ["context", "control", "metadata", "negotiation"]
+default = ["conditional", "context", "control", "metadata", "negotiation"]
 
+conditional = []
 context = []
 control = []
 metadata = []

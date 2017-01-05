@@ -68,6 +68,8 @@ use std::str::{self, FromStr};
 
 use url::Url;
 
+#[cfg(feature="conditional")]
+pub use self::conditional::{ETag, IfMatch, IfModifiedSince, IfNoneMatch, IfUnmodifiedSince, LastModified};
 #[cfg(feature="context")]
 pub use self::context::{From, Referer, UserAgent, Allow, Server};
 #[cfg(feature="control")]
@@ -111,7 +113,7 @@ macro_rules! header {
             const NAME: &'static str = $name;
             const SENSITIVE: bool = $sensitive;
 
-            fn parse($s: &[Vec<u8>], $base: Url) -> Result<Self, ()>
+            fn parse($s: &[Vec<u8>], $base: ::url::Url) -> Result<Self, ()>
             $parse
 
             fn serialize<I: Iterator<Item = W>, W: ::std::io::Write>(&$self_, $iter: I)
@@ -121,6 +123,8 @@ macro_rules! header {
     }
 }
 
+#[cfg(feature="conditional")]
+mod conditional;
 #[cfg(feature="context")]
 mod context;
 #[cfg(feature="control")]
@@ -286,4 +290,37 @@ fn serialize_list<I, W, T>(mut iter: I, values: &[T]) -> Result<(), io::Error>
         write!(w, "{}", v)?;
     }
     Ok(())
+}
+
+fn parse_star(s: &[Vec<u8>]) -> Result<(), ()> {
+    if s.len() != 1 {
+        return Err(());
+    }
+    let mut star = false;
+    for x in &s[0] {
+        if *x == b' ' || *x == b'\t' {
+            continue;
+        } else if *x == b'*' {
+            if star {
+                return Err(());
+            }
+            star = true;
+        }
+    }
+    Ok(())
+}
+
+fn parse_list1_star<T: FromStr>(s: &[Vec<u8>]) -> Result<Vec<T>, ()> {
+    parse_star(s).map(|()| Vec::new()).or_else(|()| parse_list1(s))
+}
+
+fn serialize_list_star<I, W, T>(mut iter: I, values: &[T]) -> Result<(), io::Error>
+    where I: Iterator<Item = W>,
+          W: Write,
+          T: Display
+{
+    if values.is_empty() {
+        return iter.next().unwrap().write_all(b"*");
+    }
+    serialize_list(iter, values)
 }

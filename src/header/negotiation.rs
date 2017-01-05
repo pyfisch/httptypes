@@ -1,5 +1,5 @@
 use header::{RequestHeader, parse_list0, parse_list1, serialize_list};
-use header::item::{Charset, Coding, LanguageTag, MediaType, Url, Quality};
+use header::item::{Charset, Coding, LanguageTag, MediaType, Quality};
 
 header!{
     /// `Accept` header, [RFC7231 Section 5.3.2]
