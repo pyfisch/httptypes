@@ -9,6 +9,9 @@
 //!
 //! The header fields can be sorted into different groups.
 //!
+//! ## Conditional Requests
+//! (needs to be written)
+//!
 //! ## Message Context
 //!
 //! Information about the resource and the endpoints.
@@ -36,6 +39,9 @@
 //!     the resource is intended for
 //! * [`Content-Location`](struct.ContentLocation.html): a link to the
 //!     current representation of the resource
+//!
+//! ## Control Data
+//! (needs to be written)
 //!
 //! ## Content Negotiation
 //!
